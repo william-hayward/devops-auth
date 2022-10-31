@@ -1,0 +1,20 @@
+name: E2E on Chrome
+
+on: [push]
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v3
+        with:
+          browser: chrome
+          build: npm run build
+          start: npm run start
+          wait-on: "http://localhost:3000"
+        env:
+          MONGODB_URI: "mongodb+srv://test:test@cluster0.x08wt.mongodb.net/rooms_test?retryWrites=true&w=majority"

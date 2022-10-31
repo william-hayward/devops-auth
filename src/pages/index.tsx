@@ -66,12 +66,12 @@ export default function Home({rooms}) {
           <div className="bg-white mx-auto mt-11 p-5 rounded-lg shadow-md">
             <table className="min-w-full">
               <thead>
-                <tr className="text-left text-xs border-b-2 font-semibold text-gray-700 border-gray-200 bg-gray-100 rounded-tl-lg">
+                <tr className="text-left text-xs border-b-2 font-semibold text-gray-700 border-gray-200 bg-gray-100 rounded-tl-lg rounded-tr-lg">
                   <th className="p-3 rounded-tl-lg">Room Number</th>
                   <th>Building </th>
                   <th>Student Capacity</th>
-                  <th className="rounded-tr-lg">Type</th>
-                  <th></th>
+                  <th>Type</th>
+                  <th> </th>
                 </tr>
               </thead>
               <tbody>

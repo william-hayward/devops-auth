@@ -3,7 +3,7 @@ describe("Create Room Test", () => {
     cy.visit("/");
   });
 
-  it("deletes a room", () => {
+  it("updates a room", () => {
     cy.getByData("room-item").should("have.length", 18);
     cy.getByData("edit-icon").eq(0).click();
     cy.wait(1000);
