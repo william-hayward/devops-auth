@@ -42,5 +42,4 @@ describe("Create Room Test", () => {
   });
 });
 
-export { };
-
+export {};

@@ -20,6 +20,6 @@ import "./commands";
 // require('./commands')
 
 beforeEach(() => {
-	cy.log("I run before every test in every spec file!!!!!!");
-	cy.request("/api/utility/"); //resets database after every test
+  cy.log("I run before every test in every spec file!!!!!!");
+  cy.request("/api/utility/"); //resets database after every test
 });

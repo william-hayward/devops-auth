@@ -29,5 +29,4 @@ describe("Home Page Test", () => {
   });
 });
 
-export { }; // this is to fix typescript complaint
-
+export {}; // this is to fix typescript complaint
