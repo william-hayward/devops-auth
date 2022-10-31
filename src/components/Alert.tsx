@@ -18,8 +18,9 @@ export default function Alert(props: AlertProps) {
 
   return (
     <div
+      data-test={variant === "warning" ? "waring-alert" : "success-alert"}
       className={`
-     
+      
       ${startFade ? "transition-all  duration-1000 ease-out  hidden" : ""}
       ${
         variant === "warning"

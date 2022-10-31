@@ -1,3 +1,23 @@
+Week 6 Lesson
+
+- Think about different ways to implement a test database
+
+- QA process, you must implement a CI strategy that provides an optimal level of confidence while taking into consideration test duration and infrastructure costs.
+
+- Generally, it is desired to run tests with each pushed commit, but it may not be necessary to do so for all browsers.
+
+- Complete tests
+
+- npm install --save-dev cross-env
+
+https://nextjs.org/docs/basic-features/environment-variables#environment-variable-load-order
+
+-env test MONGODB_URI=mongodb+srv://test:test@cluster0.x08wt.mongodb.net/rooms_test?retryWrites=true&w=majority
+
+- set up base url
+
+- Set up CI
+
 Week 5 lesson
 
 - introduction to integration/acceptance testing

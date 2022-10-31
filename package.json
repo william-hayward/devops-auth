@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "test": "cross-env NODE_ENV=test  next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -50,6 +51,7 @@
     "@typescript-eslint/parser": "^5.39.0",
     "autoprefixer": "^10.4.7",
     "babel-loader": "^8.2.5",
+    "cross-env": "^7.0.3",
     "cypress": "^10.11.0",
     "eslint": "8.20.0",
     "eslint-config-next": "12.2.3",

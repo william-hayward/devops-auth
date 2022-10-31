@@ -1,6 +1,6 @@
 describe("Home Page Test", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000/");
+    cy.visit("/");
   });
 
   it("shows a table containing a list of rooms", () => {
@@ -29,4 +29,5 @@ describe("Home Page Test", () => {
   });
 });
 
-export {}; // this is to fix typescript complaint
+export { }; // this is to fix typescript complaint
+
