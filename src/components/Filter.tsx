@@ -30,7 +30,7 @@ export default function Filter(props: FilterProp) {
       name === "type" && onTypeChange(value["type"]);
     });
     return () => subscription.unsubscribe();
-  }, [watch]);
+  }, [watch, onBuildingChange, onTypeChange]);
 
   const handleReset = () => {
     reset(() => ({

@@ -1,8 +1,11 @@
+import {AdvancedImage} from "@cloudinary/react";
+import {thumbnail} from "@cloudinary/url-gen/actions/resize";
 import {CloudUploadIcon} from "@heroicons/react/outline";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {SpinnerCircular} from "spinners-react";
 import {buildings, roomTypes} from "../data/";
+import useCloudinary from "../hooks/useCloudinary";
 
 export interface RoomFormProps {
   onSubmit: SubmitHandler<RoomValues>;
@@ -36,9 +39,52 @@ export default function RoomForm(props: RoomFormProps) {
     defaultValues: {...values, ...{type: values ? values.type.code : ""}},
   });
 
+  const [images, setImages] = useState([]);
+
+  // https://codesandbox.io/s/recursing-fast-vmttm8?from-embed=&file=/src/components/ImageUpload.js
+  // see for a full list of options (https://codesandbox.io/s/upload-widget-react-v7z1jz?file=/src/CloudinaryUploadWidget.js)
   useEffect(() => {
     triggerReset && reset();
   }, [triggerReset, reset]);
+
+  const {Cloudinary} = useCloudinary();
+  const img = Cloudinary.image("dev/jqv2vysqxicjyoeqdcno").resize(
+    thumbnail().width(150).height(150)
+  );
+
+  const handleImageUpload = () => {
+    if (
+      !process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ||
+      process.env.NEXT_PUBLIC_CLOUDINARY_PRESET
+    ) {
+      console.error(`in order for image uploading to work 
+      you need to set the following environment variables: 
+      NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME  and NEXT_PUBLIC_CLOUDINARY_PRESET`);
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+
+    const imageWidget = cloudinary.createUploadWidget(
+      {
+        cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+        uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_PRESET,
+        folder: process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER || "", // default to no folder
+        sources: ["local", "camera"],
+      },
+      (error, result) => {
+        if (error) {
+          console.error(error);
+        }
+
+        if (result.event === "success") {
+          setImages(result.asset_id);
+        }
+      }
+    );
+
+    imageWidget.open();
+    console.log(images);
+  };
 
   return (
     <form
@@ -55,7 +101,12 @@ export default function RoomForm(props: RoomFormProps) {
       )}
     >
       <div className="flex flex-col align-middle  space-y-2">
-        <a className="gray-outline-button">
+        {/** 160 * 160 */}
+        <div className="border-4 w-40 h-40  border-gray-100 rounded-md ">
+          <AdvancedImage cldImg={img} class="fill" />
+        </div>
+
+        <a className="gray-outline-button" onClick={handleImageUpload}>
           <CloudUploadIcon className="h-5 w-5" /> Add Room Photos
         </a>
         <label className="font-semibold"> Building</label>
