@@ -6,6 +6,8 @@ import Link from "next/link";
 import {useRouter} from "next/router";
 import {useState} from "react";
 import {useMutation} from "react-query";
+import {signIn, useSession} from "next-auth/react";
+
 import dbConnect from "../../lib/dbConnect";
 import Room from "../../models/Room";
 import Alert from "../components/Alert";
@@ -17,7 +19,8 @@ export default function Home({rooms}) {
   const [type, setType] = useState([]);
   const [roomSate, setRoomSate] = useState(rooms);
   const router = useRouter();
-
+  const session = useSession();
+  console.log(session);
   const handleCapacityChange = (n) => setCapacity(n);
   const handleBuildingChange = (b) => {
     return setBuilding(b);
@@ -57,6 +60,7 @@ export default function Home({rooms}) {
                 <PlusIcon className="h-5 w-5" /> Add Room
               </a>
             </Link>
+            <button onClick={() => signIn()}>Sign in</button>
             {isSuccess && <Alert label="Room Deleted" variant="success" />}
 
             {isError && (
