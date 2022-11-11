@@ -1,12 +1,12 @@
 import {PencilIcon, PlusIcon, TrashIcon} from "@heroicons/react/outline";
 import axios from "axios";
 import {GetServerSideProps} from "next";
+import {useSession} from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {useState} from "react";
 import {useMutation} from "react-query";
-import {signIn, useSession} from "next-auth/react";
 
 import dbConnect from "../../lib/dbConnect";
 import Room from "../../models/Room";
@@ -60,9 +60,8 @@ export default function Home({rooms}) {
                 <PlusIcon className="h-5 w-5" /> Add Room
               </a>
             </Link>
-            <button onClick={() => signIn()}>Sign in</button>
-            {isSuccess && <Alert label="Room Deleted" variant="success" />}
 
+            {isSuccess && <Alert label="Room Deleted" variant="success" />}
             {isError && (
               <Alert label="Could not delete room" variant="warning" />
             )}

@@ -1,3 +1,5 @@
+### try running npm install --quiet --no-progress 
+
 - change upload to unsigned
 
 Week 6 Lesson
