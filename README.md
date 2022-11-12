@@ -20,7 +20,7 @@ This is an ongoing project that will be used to support Solent's level 6 DevOps 
 
 `mongodb://127.0.0.1:27017/rooms`
 
-- Copy the `.env.local.example` file in this directory to .env.local, which will be ignored by Git)
+- Copy the `.env.local.example` file in this directory to `.env.local`, which will be ignored by Git)
 
   - Set your `MONGODB_URI` with the the MongoDB connection string.
 
@@ -29,3 +29,11 @@ This is an ongoing project that will be used to support Solent's level 6 DevOps 
 - Run the development server: `npm run dev`
 
 - **If you want to see the project stories**:, `npm run "storybook"`
+
+### Testing
+
+- If you want to run tests: Copy the `.env.test.example` file in this directory to `.env.test`, which will be ignored by Git)
+- Set your `MONGODB_URI` with the the MongoDB connection string, use a different database to your dev database set above.
+- Run the integration tests:
+  - `npm run test` , to start the application
+  - `npm run cypress:run`, to run the tests

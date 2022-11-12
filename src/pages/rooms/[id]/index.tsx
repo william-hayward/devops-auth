@@ -24,7 +24,7 @@ export default function Index({room}) {
             />
           )}
 
-          {!room.photos && (
+          {!room.photos[0] && (
             <Image
               src="/img/room.png"
               width={718}

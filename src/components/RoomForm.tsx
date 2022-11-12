@@ -27,10 +27,12 @@ export interface RoomValues {
 export interface DatabaseRoomValues extends RoomValues {
   _id?: string;
   type: {name: string; code: string};
+  photos: string[];
 }
 
 export default function RoomForm(props: RoomFormProps) {
   const {onSubmit, isLoading, triggerReset, values, label} = props;
+  console.log(values);
   const {
     register,
     handleSubmit,
@@ -42,8 +44,8 @@ export default function RoomForm(props: RoomFormProps) {
 
   const {data} = useSession();
 
-  const [photos, setPhotos] = useState([""]);
-  const [thumb, setThumb] = useState("");
+  const [photos, setPhotos] = useState(values.photos ? values.photos[0] : [""]);
+  const [thumb, setThumb] = useState(values.photos ? values.photos[0] : "");
 
   useEffect(() => {
     if (triggerReset) {
@@ -111,6 +113,7 @@ export default function RoomForm(props: RoomFormProps) {
       )}
     >
       <div className="flex flex-col align-middle  space-y-2">
+        {JSON.stringify(photos)}
         {thumb && (
           <>
             <TrashIcon

@@ -1,6 +1,6 @@
-
 import axios from "axios";
 import {GetServerSideProps} from "next";
+import {useSession} from "next-auth/react";
 import {useMutation} from "react-query";
 import dbConnect from "../../../../lib/dbConnect";
 import Room from "../../../../models/Room";
@@ -14,10 +14,17 @@ import RoomForm, {
 export default function Edit({room}: {room: DatabaseRoomValues}) {
   const {isLoading, isSuccess, isError, mutate} = useMutation(
     (updatedRoom: RoomValues) => {
-      console.log("updating room");
       return axios.put(`/api/rooms/${room._id}`, updatedRoom);
     }
   );
+  const {data: session} = useSession();
+  if (!session) {
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <h1> Unauthorised </h1>
+      </div>
+    );
+  }
 
   const {building, number} = room;
 
@@ -28,7 +35,6 @@ export default function Edit({room}: {room: DatabaseRoomValues}) {
         <h3 className="text-lg text-center mb-2"> Edit {building + number} </h3>
         <RoomForm
           isLoading={isLoading}
-          triggerReset={isSuccess}
           onSubmit={(room) => mutate(room)}
           values={room}
           label="Update Room"

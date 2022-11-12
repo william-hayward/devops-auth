@@ -19,8 +19,8 @@ export default function Home({rooms}) {
   const [type, setType] = useState([]);
   const [roomSate, setRoomSate] = useState(rooms);
   const router = useRouter();
-  const session = useSession();
-  console.log(session);
+  const {data: session} = useSession();
+
   const handleCapacityChange = (n) => setCapacity(n);
   const handleBuildingChange = (b) => {
     return setBuilding(b);
@@ -51,15 +51,17 @@ export default function Home({rooms}) {
       <div className="min-w-full pr-20">
         <div className="max-w-[80%] mx-auto mt-11">
           <div>
-            <Link href="/create">
-              <a
-                className="blue-button mb-7"
-                data-cy="add-room-button"
-                data-test="add-room-button"
-              >
-                <PlusIcon className="h-5 w-5" /> Add Room
-              </a>
-            </Link>
+            {session && (
+              <Link href="/create">
+                <a
+                  className="blue-button mb-7"
+                  data-cy="add-room-button"
+                  data-test="add-room-button"
+                >
+                  <PlusIcon className="h-5 w-5" /> Add Room
+                </a>
+              </Link>
+            )}
 
             {isSuccess && <Alert label="Room Deleted" variant="success" />}
             {isError && (
@@ -105,18 +107,20 @@ export default function Home({rooms}) {
                       <td> {r.building}</td>
                       <td> {r.capacity}</td>
                       <td className="rounded-r-lg">{r.type.name}</td>
-                      <td className="flex">
-                        <PencilIcon
-                          data-test="edit-icon"
-                          className="h-6 w-6 mt-2 cursor-pointer"
-                          onClick={() => router.push(`/rooms/${r._id}/edit/`)}
-                        />
-                        <TrashIcon
-                          data-test="delete-icon"
-                          className="h-6 w-6 mt-2 ml-6 cursor-pointer"
-                          onClick={() => mutate(r._id)}
-                        />
-                      </td>
+                      {session && (
+                        <td className="flex">
+                          <PencilIcon
+                            data-test="edit-icon"
+                            className="h-6 w-6 mt-2 cursor-pointer"
+                            onClick={() => router.push(`/rooms/${r._id}/edit/`)}
+                          />
+                          <TrashIcon
+                            data-test="delete-icon"
+                            className="h-6 w-6 mt-2 ml-6 cursor-pointer"
+                            onClick={() => mutate(r._id)}
+                          />
+                        </td>
+                      )}
                     </tr>
                   ))}
               </tbody>

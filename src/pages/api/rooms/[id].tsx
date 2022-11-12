@@ -1,5 +1,7 @@
+import {unstable_getServerSession} from "next-auth/next";
 import dbConnect from "../../../../lib/dbConnect";
 import Room from "../../../../models/Room";
+import {authOptions} from "../auth/[...nextauth]";
 
 export default async function handler(req, res) {
   const {
@@ -7,6 +9,10 @@ export default async function handler(req, res) {
     method,
   } = req;
 
+  const session = await unstable_getServerSession(req, res, authOptions);
+  if (!session) {
+    return res.status(404);
+  }
   await dbConnect();
   switch (method) {
     case "PUT":
