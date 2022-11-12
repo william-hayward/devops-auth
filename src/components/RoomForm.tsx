@@ -1,6 +1,7 @@
 import {AdvancedImage} from "@cloudinary/react";
 import {thumbnail} from "@cloudinary/url-gen/actions/resize";
-import {CloudUploadIcon} from "@heroicons/react/outline";
+import {CloudUploadIcon, TrashIcon} from "@heroicons/react/outline";
+import {useSession} from "next-auth/react";
 import {useEffect, useState} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {SpinnerCircular} from "spinners-react";
@@ -21,6 +22,7 @@ export interface RoomValues {
   capacity: number;
   notes?: string;
   type: string | {name: string; code: string};
+  photos: string[];
 }
 
 export interface DatabaseRoomValues extends RoomValues {
@@ -39,23 +41,21 @@ export default function RoomForm(props: RoomFormProps) {
     defaultValues: {...values, ...{type: values ? values.type.code : ""}},
   });
 
-  const [images, setImages] = useState([]);
+  const {data} = useSession();
 
-  // https://codesandbox.io/s/recursing-fast-vmttm8?from-embed=&file=/src/components/ImageUpload.js
-  // see for a full list of options (https://codesandbox.io/s/upload-widget-react-v7z1jz?file=/src/CloudinaryUploadWidget.js)
+  const [photos, setPhotos] = useState([""]);
+  const [thumb, setThumb] = useState("");
+
   useEffect(() => {
     triggerReset && reset();
   }, [triggerReset, reset]);
 
   const {Cloudinary} = useCloudinary();
-  const img = Cloudinary.image("dev/jqv2vysqxicjyoeqdcno").resize(
-    thumbnail().width(150).height(150)
-  );
 
   const handleImageUpload = () => {
     if (
       !process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ||
-      process.env.NEXT_PUBLIC_CLOUDINARY_PRESET
+      !process.env.NEXT_PUBLIC_CLOUDINARY_PRESET
     ) {
       console.error(`in order for image uploading to work 
       you need to set the following environment variables: 
@@ -64,11 +64,17 @@ export default function RoomForm(props: RoomFormProps) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
 
+    const tmpImagePath =
+      process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER + "/" + data.user.id + "/tmp" ||
+      ""; // default to no folder
+
+    // eslint-disable-next-line
+    // @ts-ignore
     const imageWidget = cloudinary.createUploadWidget(
       {
         cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
         uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_PRESET,
-        folder: process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER || "", // default to no folder
+        folder: tmpImagePath, // default to no folder
         sources: ["local", "camera"],
       },
       (error, result) => {
@@ -77,13 +83,14 @@ export default function RoomForm(props: RoomFormProps) {
         }
 
         if (result.event === "success") {
-          setImages(result.asset_id);
+          setPhotos([result.info.asset_id]);
+          setThumb(result.info.public_id);
+          imageWidget.close();
         }
       }
     );
 
     imageWidget.open();
-    console.log(images);
   };
 
   return (
@@ -92,6 +99,7 @@ export default function RoomForm(props: RoomFormProps) {
         onSubmit({
           ...data,
           ...{
+            photos: photos,
             type: {
               name: roomTypes.find((t) => t.code === data.type).name,
               code: data.type as string,
@@ -101,11 +109,23 @@ export default function RoomForm(props: RoomFormProps) {
       )}
     >
       <div className="flex flex-col align-middle  space-y-2">
-        {/** 160 * 160 */}
-        <div className="border-4 w-40 h-40  border-gray-100 rounded-md ">
-          <AdvancedImage cldImg={img} class="fill" />
-        </div>
-
+        {thumb && (
+          <>
+            <TrashIcon
+              className="w-6 h-6 cursor-pointer"
+              onClick={() => {
+                setPhotos([]);
+                setThumb("");
+              }}
+            />
+            <AdvancedImage
+              className="fill  border-4 w-40 h-40  border-gray-100 rounded-md"
+              cldImg={Cloudinary.image(thumb).resize(
+                thumbnail().width(150).height(150)
+              )}
+            />
+          </>
+        )}
         <a className="gray-outline-button" onClick={handleImageUpload}>
           <CloudUploadIcon className="h-5 w-5" /> Add Room Photos
         </a>
@@ -132,7 +152,6 @@ export default function RoomForm(props: RoomFormProps) {
             <span data-test="building-error"> Building is required</span>
           )}
         </h3>
-
         <label className="font-semibold"> Room Type</label>
         <>
           {roomTypes.map((b, i) => (
@@ -149,13 +168,11 @@ export default function RoomForm(props: RoomFormProps) {
             </div>
           ))}
         </>
-
         <h3 className="font-bold text-red-600">
           {errors.type && (
             <span data-test="type-error"> Room type is required</span>
           )}
         </h3>
-
         <label className="font-semibold"> Room Number</label>
         <input
           disabled={isLoading}
