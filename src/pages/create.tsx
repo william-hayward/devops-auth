@@ -19,7 +19,10 @@ export default function Create() {
         <RoomForm
           isLoading={isLoading}
           triggerReset={isSuccess}
-          onSubmit={(room) => mutate(room)}
+          onSubmit={(room) => {
+            console.log(room);
+            mutate(room);
+          }}
         />
         {isError && (
           <div className="mt-5">

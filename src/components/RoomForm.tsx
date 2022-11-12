@@ -22,7 +22,6 @@ export interface RoomValues {
   capacity: number;
   notes?: string;
   type: string | {name: string; code: string};
-  photos: string[];
 }
 
 export interface DatabaseRoomValues extends RoomValues {
@@ -47,7 +46,11 @@ export default function RoomForm(props: RoomFormProps) {
   const [thumb, setThumb] = useState("");
 
   useEffect(() => {
-    triggerReset && reset();
+    if (triggerReset) {
+      setThumb("");
+      setPhotos([]);
+      reset();
+    }
   }, [triggerReset, reset]);
 
   const {Cloudinary} = useCloudinary();
@@ -65,8 +68,7 @@ export default function RoomForm(props: RoomFormProps) {
     //@ts-ignore
 
     const tmpImagePath =
-      process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER + "/" + data.user.id + "/tmp" ||
-      ""; // default to no folder
+      process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER + "/" + data.user.id || ""; // default to no folder
 
     // eslint-disable-next-line
     // @ts-ignore
@@ -83,7 +85,7 @@ export default function RoomForm(props: RoomFormProps) {
         }
 
         if (result.event === "success") {
-          setPhotos([result.info.asset_id]);
+          setPhotos([result.info.public_id]);
           setThumb(result.info.public_id);
           imageWidget.close();
         }

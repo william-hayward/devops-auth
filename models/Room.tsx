@@ -1,4 +1,4 @@
-import {model, Model, models, Schema, Types} from "mongoose";
+import {model, Model, models, Schema} from "mongoose";
 
 interface TypeInterface {
   code: string;
@@ -7,14 +7,18 @@ interface TypeInterface {
 
 export interface RoomInterface {
   _id?: string;
-  photos?: Types.Array<string>;
+  photos?: string[];
   number: string;
   building: string;
   capacity: number;
   notes?: string;
   type: TypeInterface;
 }
-
+/**
+ *  id: string;
+  public_id: string;
+  tmp: boolean;
+ */
 const roomSchema = new Schema<RoomInterface, Model<RoomInterface>>({
   photos: {type: [String]},
   building: {type: String, required: true},
