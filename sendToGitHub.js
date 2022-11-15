@@ -5,7 +5,6 @@
  * npm install; however, downloading a GitBranch is fast.
  */
 
-
 const { exec } = require("child_process");
 
 /**
@@ -35,11 +34,15 @@ async function main() {
 	try {
 		await execShellCommand("git add -A");
 		await execShellCommand("git commit -m \"bot commit\"");
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		//@ts-ignore
+
+		console.log("sending node_modules branch to github");
 		await execShellCommand(`git checkout -b ${nodeModulesBranch}`);
-		console.log("uploading to github");
+		await execShellCommand("git add -f node_modules");
+		await execShellCommand("git commit -m \"bot commit\"");
 		await execShellCommand(`git push origin ${nodeModulesBranch} --force`);
+		console.log("node modules sent to github");
+
+		console.log("uploading original branch to github");
 		await execShellCommand(`git checkout ${currentBranch}`);
 		await execShellCommand(`git push origin ${currentBranch} --force`);
 		console.log("upload to github complete");
