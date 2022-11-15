@@ -33,12 +33,12 @@ async function main() {
   const nodeModulesBranch = `${currentBranch}_with_node_modules`;
   try {
     await execShellCommand("git add -A");
-    await execShellCommand("git commit -m \"bot commit\"");
+    await execShellCommand('git commit -m "bot commit"');
 
     console.log("sending node_modules branch to github");
     await execShellCommand(`git checkout -b ${nodeModulesBranch}`);
     await execShellCommand("git add -f node_modules");
-    await execShellCommand("git commit -m \"bot commit\"");
+    await execShellCommand('git commit -m "bot commit"');
     await execShellCommand(`git push origin ${nodeModulesBranch} --force`);
     console.log("node modules sent to github");
 
