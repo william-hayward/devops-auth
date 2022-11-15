@@ -46,7 +46,6 @@ async function main() {
 		await execShellCommand(`git checkout ${currentBranch}`);
 		await execShellCommand(`git push origin ${currentBranch} --force`);
 		console.log("upload to github complete");
-		await execShellCommand("git branch -D " + nodeModulesBranch);
 	} catch (e) {
 		console.error("failed to push branch to GitHub:" + JSON.stringify(e));
 	}
