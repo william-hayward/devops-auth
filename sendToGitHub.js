@@ -1,18 +1,19 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /**
  * This is a utility program that commits, and pushes to github, a version of the project
  * with the node modules installed. This was necessary as the university's network seems to throttle
  * npm install; however, downloading a GitBranch is fast.
  */
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-import { exec } from "child_process";
+
+const { exec } = require("child_process");
 
 /**
  * Executes a shell command and return it as a Promise.
  */
-function execShellCommand(cmd: string) {
+function execShellCommand(cmd) {
 	return new Promise((resolve) => {
-		exec(cmd, (error: unknown, stdout: unknown, stderr: unknown) => {
+		exec(cmd, (error, stdout, stderr) => {
 			if (error) {
 				console.warn(error);
 			}
