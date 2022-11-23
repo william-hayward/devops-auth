@@ -17,4 +17,7 @@ jobs:
           start: npm run start
           wait-on: "http://localhost:3000"
         env:
-          MONGODB_URI: "mongodb+srv://test:test@cluster0.x08wt.mongodb.net/rooms_test?retryWrites=true&w=majority"
+          MONGODB_URI: "mongodb+srv://admin:test@cluster0.ilkihuo.mongodb.net/rooms_test?retryWrites=true&w=majority"
+          NEXT_PUBLIC_TESTING: true
+          NEXTAUTH_SECRET: "sdhdshsdhsdhsdhsdhsdsdhwe67weew"
+
