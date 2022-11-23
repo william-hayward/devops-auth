@@ -6,8 +6,8 @@ import {authOptions} from "../auth/[...nextauth]";
 export default async function handler(req, res) {
   const {method} = req;
   const session = await unstable_getServerSession(req, res, authOptions);
-  if (!session) {
-    return res.status(404);
+  if (!session && !process.env.NEXT_PUBLIC_TESTING) {
+    return res.status(404).json({success: false});
   }
   await dbConnect();
 

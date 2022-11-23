@@ -1,7 +1,7 @@
 import {PencilIcon, PlusIcon, TrashIcon} from "@heroicons/react/outline";
 import axios from "axios";
 import {GetServerSideProps} from "next";
-import {useSession} from "next-auth/react";
+import useSession from "../hooks/useNextAuth";
 import Head from "next/head";
 import Link from "next/link";
 import {useRouter} from "next/router";
